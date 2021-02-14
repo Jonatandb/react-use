@@ -1,14 +1,13 @@
-/* eslint-disable */
 import { useState } from 'react';
-import useEffectOnce from './useEffectOnce';
-import useIsomorphicLayoutEffect from './useIsomorphicLayoutEffect';
+import useEffectOnce from '../useEffectOnce';
+import useIsomorphicLayoutEffect from '../useIsomorphicLayoutEffect';
 
 export function createGlobalState<S = any>(initialState?: S) {
   const store: { state: S | undefined; setState: (state: S) => void; setters: any[] } = {
     state: initialState,
     setState(state: S) {
       store.state = state;
-      store.setters.forEach(setter => setter(store.state));
+      store.setters.forEach((setter) => setter(store.state));
     },
     setters: [],
   };
@@ -17,7 +16,7 @@ export function createGlobalState<S = any>(initialState?: S) {
     const [globalState, stateSetter] = useState<S | undefined>(store.state);
 
     useEffectOnce(() => () => {
-      store.setters = store.setters.filter(setter => setter !== stateSetter);
+      store.setters = store.setters.filter((setter) => setter !== stateSetter);
     });
 
     useIsomorphicLayoutEffect(() => {
